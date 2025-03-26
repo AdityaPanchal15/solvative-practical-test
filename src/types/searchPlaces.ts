@@ -1,13 +1,16 @@
 export interface ISearchBoxProps {
   placeholder?: string;
   disabled?: boolean;
-  onSearch: (value: string) => void;
+  searchedPlace: string;
+  setSearchedPlace: (value: string) => void;
+  onSearch: () => void;
 };
 
 export interface ITableProps {
   filteredCities: Array<City>;
   currentPage: number;
   totalLoadData: number;
+  searchedPlace: string;
   setTotalLoadData: (count: number) => void;
   setCurrentPage: (page: number) => void;
 };

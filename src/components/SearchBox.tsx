@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { ISearchBoxProps } from "../types/searchPlaces";
 
-const SearchBox: React.FC<ISearchBoxProps> = ({ placeholder = "Search places...", disabled = false, onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+const SearchBox: React.FC<ISearchBoxProps> = ({ placeholder = "Search places...", disabled = false, searchedPlace, setSearchedPlace, onSearch }) => {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Handle keyboard shortcut
@@ -23,11 +22,11 @@ const SearchBox: React.FC<ISearchBoxProps> = ({ placeholder = "Search places..."
       <input
         ref={searchInputRef}
         type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        value={searchedPlace}
+        onChange={(e) => setSearchedPlace(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            onSearch(searchTerm);
+            onSearch();
           }
         }}
         placeholder={placeholder}

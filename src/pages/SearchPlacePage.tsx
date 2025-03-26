@@ -8,12 +8,13 @@ const SearchPlacePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalLoadData, setTotalLoadData] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [searchedPlace, setSearchedPlace] = useState("");
 
   useEffect(() => {
-    fetchCities(totalLoadData)
-  }, []);
+    fetchCities(totalLoadData);
+  }, [searchedPlace]);
 
-  const fetchCities = async (limit: number, city: string = "") => {
+  const fetchCities = async (limit: number) => {
     try {
       setLoading(true);
       const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/geo/cities?limit=${limit}`, {
@@ -43,12 +44,11 @@ const SearchPlacePage: React.FC = () => {
         population: city.population,
       }));
   
-      // **Use the latest city input instead of old searchedPlace**
-      setFilteredCities(
-        city
-          ? apiData.filter((item) => item.city.toLowerCase().includes(city.toLowerCase()))
-          : apiData // Reset to all cities when search is empty
-      );
+      if(searchedPlace) {
+        setFilteredCities(apiData.filter((item) => item.city.toLowerCase().includes(searchedPlace.toLowerCase())));
+      } else {
+        setFilteredCities([]);
+      }
   
       setCurrentPage(0);
     } catch (error) {
@@ -61,11 +61,11 @@ const SearchPlacePage: React.FC = () => {
   return (
     <div className="container">
       {/* Search Box */}
-      <SearchBox onSearch={(city: string) => fetchCities(totalLoadData, city)} />
+      <SearchBox searchedPlace={searchedPlace} setSearchedPlace={setSearchedPlace} onSearch={() => fetchCities(totalLoadData)} />
 
       {/* Table */}
       {loading && <div className="spinner"></div>}
-      <Table filteredCities={filteredCities} totalLoadData={totalLoadData} setTotalLoadData={setTotalLoadData} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <Table filteredCities={filteredCities} searchedPlace={searchedPlace} totalLoadData={totalLoadData} setTotalLoadData={setTotalLoadData} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   );
 };

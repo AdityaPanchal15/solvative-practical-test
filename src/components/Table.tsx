@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { ITableProps } from "../types/searchPlaces";
 
-const Table: React.FC<ITableProps> = ({ filteredCities, currentPage, totalLoadData, setTotalLoadData, setCurrentPage }) => {
+const Table: React.FC<ITableProps> = ({ filteredCities, currentPage, totalLoadData, searchedPlace, setTotalLoadData, setCurrentPage }) => {
   const itemsPerPage = 3;
   const totalPages = Math.ceil(filteredCities.length / itemsPerPage);
 
@@ -22,6 +22,7 @@ const Table: React.FC<ITableProps> = ({ filteredCities, currentPage, totalLoadDa
           </tr>
         </thead>
         <tbody>
+          {!!!searchedPlace && <tr><td colSpan={3} align="center">Start searching</td></tr>}
           {paginatedData.length ? paginatedData.map((city, index) => (
             <tr key={city.id}>
               <td>{index + 1 + currentPage * itemsPerPage}</td>
@@ -35,7 +36,7 @@ const Table: React.FC<ITableProps> = ({ filteredCities, currentPage, totalLoadDa
                 <span className="country-name">{city.country}</span>
               </td>
             </tr>
-          )) : <tr><td colSpan={3} align="center">No result found</td></tr>}
+          )) : !!searchedPlace && <tr><td colSpan={3} align="center">No result found</td></tr>}
         </tbody>
       </table>
 
