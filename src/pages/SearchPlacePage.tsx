@@ -11,7 +11,11 @@ const SearchPlacePage: React.FC = () => {
   const [searchedPlace, setSearchedPlace] = useState("");
 
   useEffect(() => {
-    fetchCities(totalLoadData);
+    const handler = setTimeout(() => {
+      fetchCities(totalLoadData);
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(handler); // Cleanup function
   }, [searchedPlace]);
 
   const fetchCities = async (limit: number) => {
@@ -44,7 +48,7 @@ const SearchPlacePage: React.FC = () => {
         population: city.population,
       }));
   
-      if(searchedPlace) {
+      if(!!searchedPlace) {
         setFilteredCities(apiData.filter((item) => item.city.toLowerCase().includes(searchedPlace.toLowerCase())));
       } else {
         setFilteredCities([]);
